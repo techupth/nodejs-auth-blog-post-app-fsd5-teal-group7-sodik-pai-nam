@@ -1,13 +1,20 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/authentication";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const { login } = useAuth();
+
+  // 4.) นำ API login มารับข้อมูล login เพื่อส่งไปเช็คกับ serverใน database
   const handleSubmit = (event) => {
     event.preventDefault();
-    // 🐨 Todo: Exercise #4
-    //  นำ Function `login` ใน AuthContext มา Execute ใน Event Handler ตรงนี้
+    // รับค่า login
+    login({
+      username,
+      password,
+    });
   };
 
   return (
