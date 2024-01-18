@@ -6,14 +6,7 @@ import axios from "axios";
 - Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
 **เวลาสร้าง Request ไปหา Server**
 - Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
-**เวลาที่สร้าง Request ไปหา Server ไม่สำเร็จ** 
-
-<axios.interceptors.response.use>
-- Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
-**เวลาได้รับ Response มาจาก Server**
-- Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
-เวลาได้รับ **Error** **Response มาจาก Server**
-*/
+**เวลาที่สร้าง Request ไปหา Server ไม่สำเร็จ** */
 
 function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
@@ -26,13 +19,20 @@ function jwtInterceptor() {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
       };
     }
-    // 🐨 Todo: Exercise #6
-    //  ให้เขียน Logic ในการแนบ Token เข้าไปใน Header ของ Request
-    // เมื่อมีการส่ง Request จาก Client ไปหา Server
-    // ภายใน Callback Function axios.interceptors.request.use
 
     return req;
   });
+
+  /*<axios.interceptors.response.use>
+- Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
+**เวลาได้รับ Response มาจาก Server**
+- Callback Function ที่จะให้ Axios เรียกใช้ทุกครั้ง 
+เวลาได้รับ **Error** **Response มาจาก Server**
+
+จะทำการลบToken  ถ้าตรงตามเงื่อนไขก็จะลบออกจาก Local Storage 
+และ redirectไปหน้า Login ด้วย Built-in <window.localtion.replace>
+
+*/
 
   axios.interceptors.response.use(
     (req) => {
@@ -44,7 +44,7 @@ function jwtInterceptor() {
         error.response.statusText === "Unauthorized"
       ) {
         window.localStorage.removeItem("token");
-        window.location.replace("/");
+        window.location.replace("/login");
       }
 
       return Promise.reject(error);
